@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {auth} from "../firebase";
 import firebase from "firebase";
 
@@ -53,12 +53,6 @@ export const Provider = ({children}) => {
     }, [])
 
     /*----- End of Youtube API -----*/
-
-
-    /*----- Like function -----*/
-
-    //const[liked, setLiked] = useState(false)
-
 
     return (
         <Context.Provider value={{currentUser, videos, youtubeEmbed, avatarURL, setLoading}}>

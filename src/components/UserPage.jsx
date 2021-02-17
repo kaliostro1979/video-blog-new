@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import UserInfo from "./UserInfo";
 import {Context} from "./context";
 import {Link, Redirect} from "react-router-dom";

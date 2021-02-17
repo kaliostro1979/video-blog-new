@@ -1,8 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react'
-import {Context} from "./context";
+import React, {useState} from 'react'
 import {auth} from "../firebase";
 import {Link} from "react-router-dom";
-import firebase from "firebase";
 
 const ForgetPassword = () => {
 

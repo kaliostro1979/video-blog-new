@@ -20,6 +20,7 @@ const Home = () => {
                     <div className="row">
                         {
                             videos.map((e) => {
+                                e.liked = false
                                 return (
                                     <div className="videos col-xl-3 col-lg-4 col-md-6" key={e.id}>
                                         <iframe src={youtubeEmbed + `${e.snippet.resourceId.videoId}`}

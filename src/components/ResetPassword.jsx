@@ -1,8 +1,6 @@
 import React, {useContext, useState} from 'react'
 import {Context} from "./context";
 import {Redirect} from "react-router-dom";
-import firebase from "firebase";
-import {auth} from "../firebase";
 
 
 const ResetPassword = ({history}) => {

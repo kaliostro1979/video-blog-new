@@ -1,10 +1,10 @@
 import React, {useContext} from 'react'
 import {auth} from "../firebase";
 import {Context} from "./context";
-import {withRouter, Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
-const Header = ({history}) => {
+const Header = () => {
     const {currentUser, avatarURL} = useContext(Context)
 
     function handleLogOut() {
