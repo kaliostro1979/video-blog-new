@@ -105,7 +105,7 @@ const SignUp = ({history}) => {
             </form>
 
             <div className="messages">
-                <div className="forgot-password"><span>Already have account? </span> <Link to="/login">Log In</Link>
+                <div className="forgot-password avatar-input"><span>Already have account? </span> <Link to="/login">Log In</Link>
                 </div>
                 <div><p className="error">{errors}</p></div>
             </div>

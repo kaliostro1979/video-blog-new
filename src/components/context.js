@@ -30,7 +30,7 @@ export const Provider = ({children}) => {
     /*Get videos from Youtube Playlist*/
 
     const apiKey = 'AIzaSyD1GdpolQTOiAob7oieVqPwhbVk4OKhjYI';
-    const playlistId = 'PLjsm9LbrBPdJPhzj6zFjJrtE-MttpVZ3U';
+    const playlistId = 'PLX56KwBDdowY32DNPrU_HwlCclLvwE_Bq';
     const youtubeEmbed = 'https://www.youtube.com/embed/'
     const result = 20;
 

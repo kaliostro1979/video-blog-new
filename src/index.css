@@ -166,6 +166,10 @@ img{
   font-size: 24px;
 }
 
+.avatar-input{
+  height: 52px;
+}
+
 .error{
   color: red;
   text-align: center;
