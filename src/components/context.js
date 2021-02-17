@@ -3,7 +3,6 @@ import {auth} from "../firebase";
 import firebase from "firebase";
 
 
-
 /*Current User*/
 export const Context = React.createContext();
 
@@ -14,9 +13,9 @@ export const Provider = ({children}) => {
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
-            if (user){
+            if (user) {
                 firebase.storage().ref(`users/${user.uid}/${user.uid}.jpg`).getDownloadURL()
-                    .then((imgURL)=>{
+                    .then((imgURL) => {
                         setAvatarURL(imgURL)
                     })
             }
@@ -24,7 +23,7 @@ export const Provider = ({children}) => {
             setLoading(false)
         });
         return unsubscribe
-    }, [])
+    }, [currentUser])
 
 
     /*Get videos from Youtube Playlist*/
@@ -37,7 +36,7 @@ export const Provider = ({children}) => {
     const [videos, setVideos] = useState([])
 
     const getVideos = async function () {
-       await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=${result}&playlistId=${playlistId}&key=${apiKey}`)
+        await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=${result}&playlistId=${playlistId}&key=${apiKey}`)
             .then((res) => {
                 return res.json()
             })
@@ -59,10 +58,6 @@ export const Provider = ({children}) => {
     /*----- Like function -----*/
 
     //const[liked, setLiked] = useState(false)
-
-
-
-
 
 
     return (
