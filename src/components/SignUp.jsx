@@ -99,13 +99,13 @@ const SignUp = ({history}) => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="avatar">Upload Avatar</label>
-                    <input id="avatar" className="form-control" type="file" onChange={getUserAvatar}/>
+                    <input id="avatar" className="form-control avatar-input" type="file" onChange={getUserAvatar}/>
                 </div>
                 <button className="btn btn-primary blog-btn">Sign Up</button>
             </form>
 
             <div className="messages">
-                <div className="forgot-password avatar-input"><span>Already have account? </span> <Link to="/login">Log In</Link>
+                <div className="forgot-password"><span>Already have account? </span> <Link to="/login">Log In</Link>
                 </div>
                 <div><p className="error">{errors}</p></div>
             </div>
