@@ -1,22 +1,28 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body{
 font-family: 'Roboto', sans-serif;
 }
 
-ul{
+body ul{
   list-style: none;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  margin: 0;
 }
 
 ul li{
   margin-right: 30px;
-  border-bottom: 2px solid #000000;
 }
 
 a, a:hover{
   text-decoration: none;
-  font-weight: bold;
-  color: #000000;
+  color: inherit;
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -28,21 +34,32 @@ h1{
   font-size: 4rem;
 }
 
-.container{
-  width: 1170px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
+
+/*Custom Styles*/
+
+
+header{
+  padding: 30px 0;
+  background: #4267B2;
 }
 
-.info-container{
-  display: block;
+.control-block{
+  justify-content: flex-end;
 }
 
-.videos{
-  width: 260px;
-  padding: 0 15px;
-  position: relative;
+.control-block ul li a, .control-block ul li a:hover{
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.home-text{
+  color: green;
+  font-size: 24px;
+  margin: 40px 0;
+}
+
+.videos iframe{
+  width: 100%;
 }
 
 .like, .liked{
@@ -67,89 +84,86 @@ h1{
   outline: none;
 }
 
-.like img{
-  width: 100%;
-}
-
-.videos iframe{
-  width: 100%;
-}
-
-.signup-form, .user-info{
-  width: 500px;
+.signup-form{
+  width: 30%;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
-.signup-form label{
-  font-size: 20px;
-}
-
-.signup-form input{
+.blog-btn{
   width: 100%;
-  height: 30px;
-  margin-bottom: 30px;
-  margin-top: 5px;
+  padding: 10px 0!important;
 }
 
-.signup-form input:focus{
-  outline: none;
+.page-title{
+  margin: 50px 0;
 }
 
-.user-info div{
-  font-size: 20px;
-  margin-bottom: 20px;
+.messages{
+  text-align: center;
+  margin: 20px auto;
+  font-size: 18px;
 }
 
-header{
-  width: 100%;
-  height: 80px;
-  display: flex;
-  justify-content: flex-end;
+.messages a{
+  background: #039be5;
+  color: #ffffff;
+  padding: 6px;
+  border-radius: 6px;
 }
 
-.header-user-info{
-  width: 500px;
-  text-align: right;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.messages a:hover{
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.messages div{
+  margin-top: 20px;
+}
+
+.forgot-password a, .sign-up a, .forgot-password a:hover, .sign-up a:hover{
+  background: transparent;
+  color: #4267B2;
+}
+
+.messages button{
+  margin-top: 30px;
 }
 
 .header-btn{
   background: transparent;
   border: none;
-  text-decoration: underline;
-  cursor: pointer;
-  text-align: right;
+  color: #ffffff;
 }
 
-.btn{
-  background: green;
+.name{
   color: #ffffff;
+}
+
+.username-block{
+  font-size: 24px;
+}
+
+.username-block .messages{
+  font-size: 24px;
+}
+
+*::placeholder{
+  color: #888888!important;
+}
+
+img{
   width: 100%;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  border-radius: 6px;
-  outline: none;
-  padding: 10px 0;
-  border: none;
-  cursor: pointer;
-  user-select: none;
-  text-align: center;
 }
 
-.btn:hover{
-  color: #ffffff;
+.header-avatar{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
-.user-info button:focus{
-  outline: none;
+.no-video p{
+  font-size: 24px;
 }
 
 .error{

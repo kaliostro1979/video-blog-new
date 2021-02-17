@@ -4,50 +4,69 @@ import {Context} from "./context";
 import {withRouter, Link} from "react-router-dom";
 
 
-const Header = () => {
-    const {currentUser} = useContext(Context)
+const Header = ({history}) => {
+    const {currentUser, avatarURL} = useContext(Context)
 
     function handleLogOut() {
-        auth.signOut()
-            .then(() => {
-                // history.push=('/')
-            })
-            .catch(function(error) {
-                alert(error.message);
-            });
+        if (currentUser){
+            auth.signOut()
+                .then(() => {
+
+                })
+                .catch(function(error) {
+
+                });
+        }
     }
 
     if (currentUser) {
         return (
             <header>
-                <div className="header-user-info">
-                    <Link to="/">Home</Link>
-                    <div className="name"><span>{currentUser.email}</span></div>
-                    <ul>
-                        <li><Link to="/user-page">User Page</Link></li>
-                    </ul>
-                    <button className="header-btn" onClick={handleLogOut}>
-                        Sign Out
-                    </button>
+                <div className="container control-block">
+                    <div className="row">
+                        <ul>
+                            <li>
+                                <Link to="/">Home</Link>
+                            </li>
+                            <li className="header-avatar">
+                                <img src={avatarURL} alt="avatar"/>
+                            </li>
+                            <li>
+                                <div className="name"><span>{currentUser.email}</span></div>
+                            </li>
+                            <li>
+                                <Link to="/user-page">User Page</Link>
+                            </li>
+                            <li>
+                                <button className="header-btn" onClick={handleLogOut}>
+                                    Sign Out
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </header>
         )
 
     } else {
         return (
-            <>
-                <ul>
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/login">Login</Link>
-                    </li>
-                    <li>
-                        <Link to="/sign-up">Sign Up</Link>
-                    </li>
-                </ul>
-            </>
+            <header>
+                <div className="container control-block">
+                    <div className="row">
+                        <ul>
+                            <li>
+                                <Link to="/">Home</Link>
+                            </li>
+                            <li>
+                                <Link to="/login">Login</Link>
+                            </li>
+                            <li>
+                                <Link to="/sign-up">Sign Up</Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
         )
     }
 }

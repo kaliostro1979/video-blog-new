@@ -3,15 +3,23 @@ import {auth} from "../firebase";
 import firebase from "firebase";
 
 
+
 /*Current User*/
 export const Context = React.createContext();
 
 export const Provider = ({children}) => {
     const [currentUser, setCurrentUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [avatarURL, setAvatarURL] = useState('')
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user){
+                firebase.storage().ref(`users/${user.uid}/${user.uid}.jpg`).getDownloadURL()
+                    .then((imgURL)=>{
+                        setAvatarURL(imgURL)
+                    })
+            }
             setCurrentUser(user)
             setLoading(false)
         });
@@ -41,7 +49,7 @@ export const Provider = ({children}) => {
 
     useEffect(() => {
 
-        getVideos();
+        getVideos().then()
 
     }, [])
 
@@ -58,7 +66,7 @@ export const Provider = ({children}) => {
 
 
     return (
-        <Context.Provider value={{currentUser, videos, youtubeEmbed}}>
+        <Context.Provider value={{currentUser, videos, youtubeEmbed, avatarURL, setLoading}}>
             {!loading && children}
         </Context.Provider>
     )

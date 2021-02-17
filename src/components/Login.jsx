@@ -1,5 +1,7 @@
 import React, {useContext, useState} from 'react'
 import {auth} from "../firebase";
+import {Link} from "react-router-dom";
+import {Context} from "./context";
 
 
 
@@ -17,30 +19,38 @@ const Login = ({history}) => {
         setPassword(event.target.value)
     }
 
-    function handleLogin (event){
+    async function handleLogin (event){
         event.preventDefault()
-        auth.signInWithEmailAndPassword(email, password)
+        await auth.signInWithEmailAndPassword(email, password)
             .then((data)=>{
                 history.push('/')
             })
             .catch ((err)=>{
                 setError(err.message)
-                //history.push('/sign-up')
             })
-
     }
 
     return (
         <>
-            <h1>Login</h1>
+            <h1 className="page-title">Login</h1>
             <form action="" className="signup-form" onSubmit={handleLogin}>
-                <label htmlFor="email">Email</label>
-                <input id="email" type="text" onChange={getEmail} required/>
-                <label htmlFor="password">Password</label>
-                <input id="password" type="password" onChange={getPassword} required/>
-                <button className="btn">Login</button>
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <input id="email" className="form-control" type="text" onChange={getEmail} required/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input id="password" className="form-control" type="password" onChange={getPassword} required/>
+                </div>
+                <button className="btn btn-primary blog-btn">Login</button>
             </form>
-            <p className="error">{error}</p>
+            <div className="container">
+                <div className="messages">
+                    <div className="forgot-password"><Link to="/forget-password">Forgot password?</Link><br/></div>
+                    <div className="sign-up"><span>Dont have an account? </span> <Link to="/sign-up">Sign Up</Link></div>
+                    <div><p className="error">{error}</p></div>
+                </div>
+            </div>
         </>
     )
 }

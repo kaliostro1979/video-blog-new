@@ -7,6 +7,8 @@ import SignUp from "./components/SignUp";
 import UserPage from "./components/UserPage";
 import {Provider} from "./components/context";
 import Header from "./components/Header";
+import ResetPassword from "./components/ResetPassword";
+import ForgetPassword from "./components/ForgetPassword";
 
 
 
@@ -21,6 +23,8 @@ function App() {
                    <Route exact path="/login" component={Login}/>
                    <Route exact path="/sign-up" component={SignUp}/>
                    <Route exact path="/user-page" component={UserPage}/>
+                   <Route exact path="/reset-password" component={ResetPassword}/>
+                   <Route exact path="/forget-password" component={ForgetPassword}/>
                </div>
            </Router>
        </Provider>

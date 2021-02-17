@@ -5,7 +5,7 @@ import firebase from "firebase";
 
 
 const UserInfo = () => {
-    const{currentUser} = useContext(Context)
+    const{currentUser, avatarURL} = useContext(Context)
     const[currentUserName, setCurrentUserName] = useState()
 
     useEffect(()=>{
@@ -30,9 +30,10 @@ const UserInfo = () => {
     if(currentUser){
 
         return (
-            <>
-                <div className="name">Name: <span>{currentUserName}</span></div>
-                <div className="name">Email: <span>{currentUser.email}</span></div>
+            <>  <div className="avatar">
+                <img src={avatarURL} alt=""/>
+            </div>
+                <div className="text-center username-block">Welcome <strong>{currentUserName}</strong></div>
             </>
         )
     }
