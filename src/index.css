@@ -84,6 +84,10 @@ header{
   outline: none;
 }
 
+.dislike{
+  background: #ff0000;
+}
+
 .signup-form{
   width: 30%;
   margin: 0 auto;
@@ -168,6 +172,15 @@ img{
 
 .avatar-input{
   height: 44px!important;
+}
+
+.avatar{
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid blue;
+  width: 200px;
+  margin: 0 auto;
 }
 
 .error{

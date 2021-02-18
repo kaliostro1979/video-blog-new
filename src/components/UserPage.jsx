@@ -61,7 +61,7 @@ const UserPage = () => {
                                                     allowFullScreen>
                                             </iframe>
                                             <p>{video.video.snippet.title}</p>
-                                            <button className="like" onClick={() => handleDisLike(video)} id={video.video.id}>
+                                            <button className="like dislike" onClick={() => handleDisLike(video)} id={video.video.id}>
                                                 Dislike
                                             </button>
                                         </div>
