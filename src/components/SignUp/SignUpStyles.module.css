@@ -1,0 +1,41 @@
+.SignUpFormMain{
+    padding-top: 130px;
+}
+
+.PageTitle{
+    margin: 50px 0;
+}
+
+.SignUpForm{
+    width: 30%;
+    margin: 0 auto;
+}
+
+.AvatarInput{
+    height: 44px !important;
+}
+
+.AvatarInput:focus{
+    outline: none;
+}
+
+.BlogBtn{
+    width: 100%;
+    padding: 10px 0 !important;
+}
+
+.ForgotPassword a, .ForgotPassword a:hover, .SignUp a, .SignUp a:hover{
+    background: transparent;
+    color: #4267B2;
+}
+
+.Messages{
+    text-align: center;
+    margin: 20px auto;
+    font-size: 18px;
+}
+
+
+.Messages div{
+    margin-top: 20px;
+}

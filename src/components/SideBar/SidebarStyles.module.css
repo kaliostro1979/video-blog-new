@@ -1,0 +1,35 @@
+/*Sidebar*/
+
+.Sidebar {
+    height: 100%;
+    position: fixed;
+    top: 110px;
+    z-index: 3;
+    width: 317px;
+    left: 0;
+    background-color: #4267B2;
+    padding-top: 25px;
+}
+
+
+.SidebarList {
+    display: block;
+    font-size: 18px;
+}
+
+.SidebarList li {
+    margin: 0;
+}
+
+.SidebarList li a {
+    color: #ffffff;
+    padding: 7px 0 7px 35px;
+    display: block;
+    text-decoration: none;
+}
+
+.SidebarList li a:hover {
+    color: #4267B2;
+    text-decoration: none;
+    background-color: #ffffff;
+}
