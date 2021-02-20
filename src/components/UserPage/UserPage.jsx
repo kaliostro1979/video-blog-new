@@ -14,11 +14,10 @@ const UserPage = () => {
     const [noVideo, setNoVideo] = useState('')
 
 
-
-
     useEffect(() => {
+        let isMounted = true;
+
         setNoVideo('You have no any liked video yet')
-        let isSubscribed = true;
 
         firebase.database().ref(`videos/${currentUser.uid}`).on('value', (snapshot) => {
             let likedVideos = snapshot.val()
@@ -28,8 +27,7 @@ const UserPage = () => {
             }
             setVideos(videoArray)
         })
-
-        return () => (isSubscribed = false)
+        return () => {isMounted = false};
     }, [])
 
 
@@ -37,7 +35,7 @@ const UserPage = () => {
         firebase.database().ref(`videos/${currentUser.uid}`).child(video.videoKey).remove()
     }
 
-    function handleDeleteAccount (){
+    function handleDeleteAccount() {
         currentUser.delete()
     }
 
@@ -56,13 +54,16 @@ const UserPage = () => {
                                             return (
                                                 <Col lg={3} key={i}>
                                                     <div className={ups.Videos}>
-                                                        <iframe src={youtubeEmbed + `${video.video.snippet.resourceId.videoId}`}
-                                                                frameBorder="0"
-                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                allowFullScreen>
+                                                        <iframe
+                                                            src={youtubeEmbed + `${video.video.snippet.resourceId.videoId}`}
+                                                            frameBorder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                            allowFullScreen>
                                                         </iframe>
                                                         <p>{video.video.snippet.title}</p>
-                                                        <button className={ups.Dislike} onClick={() => handleDisLike(video)} id={video.video.id}>
+                                                        <button className={ups.Dislike}
+                                                                onClick={() => handleDisLike(video)}
+                                                                id={video.video.id}>
                                                             Dislike
                                                         </button>
                                                     </div>
@@ -77,7 +78,8 @@ const UserPage = () => {
                                     <UserInfo/>
                                     <div className={ups.Messages}>
                                         <Link to="/reset-password">Reset Password</Link>
-                                        <Button variant="danger" className={ups.DeleteAccountBtn} onClick={handleDeleteAccount}>Delete Account</Button>
+                                        <Button variant="danger" className={ups.DeleteAccountBtn}
+                                                onClick={handleDeleteAccount}>Delete Account</Button>
                                     </div>
                                 </div>
                             </Col>

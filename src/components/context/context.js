@@ -11,8 +11,9 @@ export const Provider = ({children}) => {
     const [loading, setLoading] = useState(true)
     const [avatarURL, setAvatarURL] = useState('')
 
-    useMemo(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
+    useMemo(async () => {
+        let isMounted = true;
+        await auth.onAuthStateChanged(user => {
             if (user) {
                 firebase.storage().ref(`users/${user.uid}/${user.uid}.jpg`).getDownloadURL()
                     .then((imgURL) => {
@@ -22,16 +23,16 @@ export const Provider = ({children}) => {
             setCurrentUser(user)
             setLoading(false)
         });
-        return unsubscribe
-    }, [currentUser])
+        return () => { isMounted = false };
+    }, [currentUser]).then()
 
     const[currentUserName, setCurrentUserName] = useState()
 
-    useEffect(()=>{
+    useEffect(async ()=>{
         let isSubscribed = true;
 
         if(currentUser){
-            firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot)=>{
+            await firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot)=>{
                 snapshot.forEach((data)=>{
                     const currentUserName = data.val().name
                     const currentUserId = data.val().id
@@ -68,9 +69,11 @@ export const Provider = ({children}) => {
     }
 
     useEffect(() => {
+        let isMounted = true;
 
         getVideos().then()
 
+        return () => { isMounted = false };
     }, [])
 
     /*----- End of Youtube API -----*/
