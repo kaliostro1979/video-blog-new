@@ -2,20 +2,25 @@
     position: absolute;
     z-index: 2;
     color: #ECEFF1;
-    padding: 1px 20px;
+    padding: 7px 20px!important;
     background: #039be5;
     text-align: center;
     line-height: 30px;
     top: 0;
     left: 15px;
     cursor: pointer;
-    border: none;
+    border: none!important;
     border-radius: 0!important;
 }
 
+.Like:focus, .Liked:focus{
+    outline: none!important;
+    box-shadow: none!important;
+    border: none!important;
+}
 
 .Liked {
-    background: #ff0000;
+    background: #ff0000!important;
 }
 
 .Like:focus, .Liked:focus {
