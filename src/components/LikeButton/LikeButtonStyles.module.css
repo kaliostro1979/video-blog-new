@@ -1,0 +1,23 @@
+.Like, .Liked{
+    position: absolute;
+    z-index: 2;
+    color: #ECEFF1;
+    padding: 1px 20px;
+    background: #039be5;
+    text-align: center;
+    line-height: 30px;
+    top: 0;
+    left: 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 0!important;
+}
+
+
+.Liked {
+    background: #ff0000;
+}
+
+.Like:focus, .Liked:focus {
+    outline: none;
+}

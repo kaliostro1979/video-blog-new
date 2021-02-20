@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import {auth} from "../firebase";
+import React, {useEffect, useMemo, useState} from 'react'
+import {auth} from "../../firebase";
 import firebase from "firebase";
 
 
@@ -11,7 +11,7 @@ export const Provider = ({children}) => {
     const [loading, setLoading] = useState(true)
     const [avatarURL, setAvatarURL] = useState('')
 
-    useEffect(() => {
+    useMemo(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 firebase.storage().ref(`users/${user.uid}/${user.uid}.jpg`).getDownloadURL()
@@ -24,6 +24,27 @@ export const Provider = ({children}) => {
         });
         return unsubscribe
     }, [currentUser])
+
+    const[currentUserName, setCurrentUserName] = useState()
+
+    useEffect(()=>{
+        let isSubscribed = true;
+
+        if(currentUser){
+            firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot)=>{
+                snapshot.forEach((data)=>{
+                    const currentUserName = data.val().name
+                    const currentUserId = data.val().id
+                    if(currentUserId === currentUser.uid){
+                        setCurrentUserName(currentUserName)
+                    }
+                })
+            })
+        }
+
+        return () => (isSubscribed = false)
+
+    },[currentUser])
 
 
     /*Get videos from Youtube Playlist*/
@@ -55,7 +76,7 @@ export const Provider = ({children}) => {
     /*----- End of Youtube API -----*/
 
     return (
-        <Context.Provider value={{currentUser, videos, youtubeEmbed, avatarURL, setLoading}}>
+        <Context.Provider value={{currentUser, videos, youtubeEmbed, avatarURL, setLoading, currentUserName}}>
             {!loading && children}
         </Context.Provider>
     )

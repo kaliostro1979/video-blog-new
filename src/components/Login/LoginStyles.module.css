@@ -1,0 +1,44 @@
+.LoginMain{
+    padding-top: 250px;
+}
+
+.PageTitle{
+    margin: 50px 0;
+}
+
+.LoginForm{
+    width: 30%;
+    margin: 0 auto;
+}
+
+.Messages{
+    text-align: center;
+    margin: 20px auto;
+    font-size: 18px;
+}
+
+.Messages a{
+    background: #039be5;
+    color: #ffffff;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.Messages a:hover{
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.Messages div{
+    margin-top: 20px;
+}
+
+.ForgotPassword a, .ForgotPassword a:hover, .SignUp a, .SignUp a:hover{
+    background: transparent;
+    color: #4267B2;
+}
+
+.BlogBtn{
+    width: 100%;
+    padding: 10px 0 !important;
+}

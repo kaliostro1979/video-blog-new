@@ -1,11 +1,13 @@
 import React, {useContext, useEffect, useMemo, useState} from 'react'
-import {Context} from "./context";
+import {Context} from "../context/context";
 import firebase from "firebase";
+import {useHistory} from "react-router-dom";
+import lbs from './LikeButtonStyles.module.css'
 
 
 const LikeButton = ({id})=>{
     const{videos, currentUser} = useContext(Context)
-
+    const history = useHistory();
     const[videoId, setVideoId] = useState([])
     useMemo(getLikedVideos, [currentUser])
 
@@ -25,30 +27,34 @@ const LikeButton = ({id})=>{
 
     function handleLike(event){
         const likeBtnId = event.target.getAttribute('id')
-        videos.map((video)=>{
-            if (likeBtnId === video.id){
-                const userVideo = firebase.database().ref(`videos/${currentUser.uid}`)
-                const userVideoData = {
-                    video: video,
-                    liked: true
+        if(currentUser){
+            videos.map((video)=>{
+                if (likeBtnId === video.id){
+                    const userVideo = firebase.database().ref(`videos/${currentUser.uid}`)
+                    const userVideoData = {
+                        video: video,
+                        liked: true
+                    }
+                    userVideo.push(userVideoData)
                 }
-                userVideo.push(userVideoData)
-            }
-        })
+            })
+        }else{
+            history.push('/login')
+        }
     }
 
     return(
         <>
-            <button className="like" onClick={handleLike} id={id}>
+            <div className={lbs.Like} onClick={handleLike} id={id}>
                 Like
-            </button>
+            </div>
             {
-                videoId.map((vid)=>{
+                videoId.map((vid, i)=>{
                     if(vid.id === id && currentUser){
                         return (
-                            <button className="liked" onClick={handleLike} id={id} disabled>
+                            <div className={lbs.Liked} onClick={handleLike} id={id} disabled key={i}>
                                 Like
-                            </button>
+                            </div>
                         )
                     }
                 })
