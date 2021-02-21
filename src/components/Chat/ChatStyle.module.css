@@ -5,3 +5,32 @@
 .ChatMain{
     padding-top: 90px;
 }
+
+.ChatFieldMain ul{
+    display: inline-flex;
+    flex-direction: column-reverse;
+    width: 100%;
+
+}
+
+.SentMessages{
+    padding: 30px;
+    border: 1px solid #bbbbbb;
+    border-radius: 6px;
+    max-height: 400px;
+    min-height: 400px;
+    overflow-y: scroll;
+}
+
+.SentMessages p{
+    margin: 0;
+}
+
+.SentMessages ul li{
+    padding: 15px;
+    background-color: #ededed;
+    border-radius: 6px;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: right;
+}
