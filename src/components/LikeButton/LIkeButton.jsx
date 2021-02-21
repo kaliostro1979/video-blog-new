@@ -3,6 +3,7 @@ import {Context} from "../context/context";
 import firebase from "firebase";
 import {useHistory} from "react-router-dom";
 import lbs from './LikeButtonStyles.module.css'
+import {Button} from "react-bootstrap";
 
 
 const LikeButton = ({id})=>{
@@ -45,16 +46,16 @@ const LikeButton = ({id})=>{
 
     return(
         <>
-            <div className={lbs.Like} onClick={handleLike} id={id}>
+            <Button className={lbs.Like} onClick={handleLike} id={id}>
                 Like
-            </div>
+            </Button>
             {
                 videoId.map((vid, i)=>{
                     if(vid.id === id && currentUser){
                         return (
-                            <div className={lbs.Liked} onClick={handleLike} id={id} disabled key={i}>
+                            <Button className={lbs.Liked} onClick={handleLike} id={id} disabled={true} key={i}>
                                 Like
-                            </div>
+                            </Button>
                         )
                     }
                 })
