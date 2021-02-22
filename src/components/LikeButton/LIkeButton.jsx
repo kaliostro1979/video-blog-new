@@ -7,7 +7,8 @@ import {Button} from "react-bootstrap";
 
 
 const LikeButton = ({id})=>{
-    const{videos, currentUser} = useContext(Context)
+    const{ currentUser, videos } = useContext(Context)
+
     const history = useHistory();
     const[videoId, setVideoId] = useState([])
     useMemo(getLikedVideos, [currentUser])
@@ -26,10 +27,10 @@ const LikeButton = ({id})=>{
     }
 
 
-    function handleLike(event){
+    async function handleLike(event){
         const likeBtnId = event.target.getAttribute('id')
         if(currentUser){
-            videos.map((video)=>{
+            await videos.map((video)=>{
                 if (likeBtnId === video.id){
                     const userVideo = firebase.database().ref(`videos/${currentUser.uid}`)
                     const userVideoData = {

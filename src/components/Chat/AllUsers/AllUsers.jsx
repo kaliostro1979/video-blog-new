@@ -1,18 +1,41 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import au from "./AllUsersStyle.module.css";
-import {Col} from "react-bootstrap";
+import {Col, Button, Row} from "react-bootstrap";
+import firebase from "firebase";
+import {Context} from "../../context/context";
 
-const AllUsers = ()=>{
+
+const AllUsers = () => {
+
+    const {status, allUsers, handleAddFriends, friends} = useContext(Context)
+
+
     return (
-        <Col lg={2}>
+        <Col lg={3}>
             <div className={au.AllUsersMain}>
                 <h3>All Users</h3>
                 <ul>
-                    <li>User-1</li>
-                    <li>User-2</li>
-                    <li>User-3</li>
-                    <li>User-4</li>
-                    <li>User-5</li>
+                    {
+                        allUsers.map((user) => {
+                            return (
+                                <li key={user.id}>
+                                    <Row>
+                                        <Col lg={3}>
+                                            <div className={au.UserImageContainer} style={{backgroundImage: `url(${status ? user.imagePath : './avatar.png'})`}}>
+
+                                            </div>
+                                        </Col>
+                                        <Col lg={6}>
+                                            <p>{user.name}</p>
+                                        </Col>
+                                        <Col lg={3}>
+                                            <Button className={au.AddFriendBtn} onClick={handleAddFriends} id={user.id}>+</Button>
+                                        </Col>
+                                    </Row>
+                                </li>
+                            )
+                        })
+                    }
                 </ul>
             </div>
         </Col>

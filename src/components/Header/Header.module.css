@@ -33,5 +33,10 @@ header {
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
+    margin-right: 20px;
+}
+
+.Navigation ul li, .UserInfoBlock ul li{
+    margin-right: 20px;
 }
 

@@ -4,7 +4,7 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
 import UserPage from "./components/UserPage/UserPage";
-import {Provider} from "./components/context/context";
+import {Context, Provider} from "./components/context/context";
 import Header from "./components/Header/Header";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
@@ -13,8 +13,9 @@ import SideBar from "./components/SideBar/SideBar";
 import {Container, Row, Col} from "react-bootstrap";
 
 
-function App() {
 
+
+function App() {
     return (
        <Provider>
            <Router>
@@ -26,7 +27,7 @@ function App() {
                                <SideBar/>
                            </Col>
                            <Col lg={10}>
-                               <Route exact path="/" component={Home}/>
+                               <Route exact path={`/`} component={Home}/>
                                <Route exact path="/login" component={Login}/>
                                <Route exact path="/sign-up" component={SignUp}/>
                                <Route exact path="/user-page" component={UserPage}/>

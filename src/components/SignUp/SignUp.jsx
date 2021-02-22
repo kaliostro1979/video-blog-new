@@ -1,13 +1,13 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import {auth} from "../../firebase";
 import firebase from "firebase";
 import {Link} from "react-router-dom";
 import {Row, Col, Form, FormGroup, FormControl, Button, FormLabel} from "react-bootstrap";
 import sus from './SignUpStyles.module.css'
+import {Context} from "../context/context";
 
 
 const SignUp = ({history}) => {
-
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -21,6 +21,7 @@ const SignUp = ({history}) => {
     async function signUpHandler(event) {
         if (password === confirmPassword) {
             let videos = []
+            let friends = []
             event.preventDefault()
            await auth.createUserWithEmailAndPassword(email, password)
                 .then((data) => {
@@ -33,15 +34,16 @@ const SignUp = ({history}) => {
                         id: userUid,
                         name: userName,
                         video: videos.push(),
-                        email: email
+                        email: email,
+                        friends: friends.push()
                     }
-                    newUser.push(newUserData)
+                    newUser.set(newUserData)
                     firebase.storage().ref(`users/${userUid}/${userUid}.jpg`).put(avatar)
                         .then((img) => {
-                            console.log(img);
+
                         })
                         .catch((err) => {
-                            console.log(err.message);
+
                         })
                     history.push('/')
                 })

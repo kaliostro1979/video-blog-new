@@ -1,19 +1,31 @@
 import React, {useEffect, useMemo, useState} from 'react'
 import {auth} from "../../firebase";
-import firebase from "firebase";
+import firebase, {onLog} from "firebase";
 
 
 /*Current User*/
 export const Context = React.createContext();
 
 export const Provider = ({children}) => {
+
+
     const [currentUser, setCurrentUser] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [avatarURL, setAvatarURL] = useState('')
+    const [avatarURL, setAvatarURL] = useState('./avatar.png')
+    const [imagePath, setImagePath] = useState('')
+    const [status, setStatus] = useState(false)
+    const [currentUserName, setCurrentUserName] = useState()
+    const [allUsers, setAllUsers] = useState([])
 
-    useMemo(async () => {
+  /*====================================================================================================================*/
+
+    /*--- User Status Handling ----*/
+
+    useEffect(async () => {
+
         let isMounted = true;
         await auth.onAuthStateChanged(user => {
+            setStatus(false)
             if (user) {
                 firebase.storage().ref(`users/${user.uid}/${user.uid}.jpg`).getDownloadURL()
                     .then((imgURL) => {
@@ -21,34 +33,93 @@ export const Provider = ({children}) => {
                     })
             }
             setCurrentUser(user)
-            setLoading(false)
         });
-        return () => { isMounted = false };
-    }, [currentUser]).then()
+        setLoading(false)
 
-    const[currentUserName, setCurrentUserName] = useState()
+        return () => {isMounted = false};
+    }, [currentUser])
 
-    useEffect(async ()=>{
-        let isSubscribed = true;
 
-        if(currentUser){
-            await firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot)=>{
-                snapshot.forEach((data)=>{
-                    const currentUserName = data.val().name
-                    const currentUserId = data.val().id
-                    if(currentUserId === currentUser.uid){
-                        setCurrentUserName(currentUserName)
-                    }
-                })
+    /*--- End of User Status Handling ----*/
+
+    /*==================================================================================================================*/
+
+    useEffect(async () => {
+        let isMounted = true;
+
+        /*---- Get Current User Name ----*/
+
+        if (currentUser) {
+            setStatus(true)
+            await firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot) => {
+                let dataValue = snapshot.val()
+                const currentUserName = dataValue.name
+                const currentUserId = dataValue.id
+                if (currentUserId === currentUser.uid) {
+                    setCurrentUserName(currentUserName)
+                }
             })
+
+    /*==================================================================================================================*/
+
+            /*--- Get User avatar URL ----*/
+
+            if (status) {
+                await firebase.database().ref(`users/${currentUser.uid}`).update({
+                    imagePath: avatarURL,
+                    status: status
+                })
+            } else {
+                await firebase.database().ref(`users/${currentUser.uid}`).update({
+                    imagePath: './avatar.png',
+                })
+            }
+
+            /*--- End of Get User avatar URL ----*/
+
+    /*==================================================================================================================*/
+
+            /*---- Get All Users ----*/
+
+            await firebase.database().ref().child('users').on('value', (snapshot) => {
+                let userArray = []
+                snapshot.forEach((data) => {
+                    if (data.val().id !== currentUser.uid){
+                        userArray = [data.val(), ...userArray]
+                        setAllUsers(userArray)
+                    }
+                });
+            })
+
+            /*---- End of Get All Users ----*/
+
+
+    /*==================================================================================================================*/
+
         }
 
-        return () => (isSubscribed = false)
+        return () => {isMounted = false};
 
-    },[currentUser])
+    }, [avatarURL, status])
 
 
-    /*Get videos from Youtube Playlist*/
+    /*---- Handle Friends Adding ----*/
+
+    function handleAddFriends(event) {
+        const addFriendBtn = event.target
+        const addFriendBtnId = addFriendBtn.getAttribute('id')
+        allUsers.map((fr) => {
+            if (addFriendBtnId === fr.id && addFriendBtnId !== currentUser.uid) {
+                const selectedFriends = firebase.database().ref(`users/${currentUser.uid}/friends`)
+                selectedFriends.push(fr)
+            }
+        })
+    }
+
+    /*---- End of Handle Friends Adding ----*/
+
+
+    /*--- Get videos from Youtube Playlist ----*/
 
     const apiKey = 'AIzaSyD1GdpolQTOiAob7oieVqPwhbVk4OKhjYI';
     const playlistId = 'PLX56KwBDdowY32DNPrU_HwlCclLvwE_Bq';
@@ -68,18 +139,34 @@ export const Provider = ({children}) => {
             });
     }
 
-    useEffect(() => {
+    useEffect(async () => {
         let isMounted = true;
 
-        getVideos().then()
+        setLoading(true)
 
-        return () => { isMounted = false };
+        await getVideos().then()
+
+        setLoading(false)
+
+        return () => {isMounted = false};
     }, [])
 
     /*----- End of Youtube API -----*/
 
     return (
-        <Context.Provider value={{currentUser, videos, youtubeEmbed, avatarURL, setLoading, currentUserName}}>
+        <Context.Provider
+            value={{
+                currentUser,
+                videos,
+                youtubeEmbed,
+                avatarURL,
+                setLoading,
+                currentUserName,
+                imagePath,
+                status,
+                allUsers,
+                handleAddFriends
+            }}>
             {!loading && children}
         </Context.Provider>
     )

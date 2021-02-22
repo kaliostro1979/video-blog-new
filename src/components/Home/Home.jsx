@@ -8,7 +8,7 @@ import hs from './HomeStyles.module.css'
 
 const Home = () => {
 
-    const {videos, youtubeEmbed, currentUser} = useContext(Context)
+    const {currentUser, videos, youtubeEmbed} = useContext(Context)
 
     return (
         <Row>

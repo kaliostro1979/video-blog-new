@@ -19,24 +19,29 @@ const UserPage = () => {
 
         setNoVideo('You have no any liked video yet')
 
-        firebase.database().ref(`videos/${currentUser.uid}`).on('value', (snapshot) => {
-            let likedVideos = snapshot.val()
-            let videoArray = []
-            for (let videoKey in likedVideos) {
-                videoArray.push({videoKey, ...likedVideos[videoKey]})
-            }
-            setVideos(videoArray)
-        })
+        if (currentUser){
+            firebase.database().ref(`videos/${currentUser.uid}`).on('value', (snapshot) => {
+                let likedVideos = snapshot.val()
+                let videoArray = []
+                for (let videoKey in likedVideos) {
+                    videoArray.push({videoKey, ...likedVideos[videoKey]})
+                }
+                setVideos(videoArray)
+            })
+        }
         return () => {isMounted = false};
     }, [])
 
 
-    function handleDisLike(video) {
-        firebase.database().ref(`videos/${currentUser.uid}`).child(video.videoKey).remove()
+    async function handleDisLike(video) {
+
+        await firebase.database().ref(`videos/${currentUser.uid}`).child(video.videoKey).remove()
+
     }
 
-    function handleDeleteAccount() {
+    async function handleDeleteAccount() {
         currentUser.delete()
+        await firebase.database().ref(`users/${currentUser.uid}`).remove()
     }
 
 

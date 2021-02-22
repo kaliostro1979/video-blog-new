@@ -5,7 +5,7 @@ import AllUsers from "./AllUsers/AllUsers";
 import AllFriends from "./AllFriends/AllFriends";
 import firebase from "firebase";
 import {Context} from "../context/context";
-import {useHistory, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 
 const Chat = () => {
@@ -16,21 +16,23 @@ const Chat = () => {
     const [sentMessages, setSentMessages] = useState([])
 
 
-    useEffect(async ()=>{
+    useMemo(async ()=>{
 
         let isSubscribed = true;
 
-        await firebase.database().ref(`messages/${currentUser.uid}`).on('value', (snapshot)=>{
-            let messagesArr = []
-            snapshot.forEach((snap)=>{
-                messagesArr=[snap.val(), ...messagesArr]
+        if(currentUser){
+            await firebase.database().ref(`messages/${currentUser.uid}`).on('value', (snapshot)=>{
+                let messagesArr = []
+                snapshot.forEach((snap)=>{
+                    messagesArr=[snap.val(), ...messagesArr]
+                })
+                setSentMessages(messagesArr)
             })
-            setSentMessages(messagesArr)
-        })
+        }
 
         return () => (isSubscribed = false)
 
-    },[])
+    },[]).then()
 
 
     function handleMessage(event){
@@ -40,7 +42,7 @@ const Chat = () => {
 
     async function handleSendingMessage(event){
         event.preventDefault()
-        const date = new Date().toDateString();
+        const date = new Date().toLocaleTimeString()
         setDate(date)
         const userMessage = await firebase.database().ref(`messages/${currentUser.uid}`)
         const userMessageData = {
@@ -65,14 +67,13 @@ const Chat = () => {
                     </Row>
                     <Row>
                         <AllUsers/>
-                        <Col lg={8}>
+                        <Col lg={6}>
                             <div className={cs.ChatFieldMain}>
                                 <h3>Chat Field</h3>
                                 <div className={cs.SentMessages}>
                                     <ul>
                                         {
                                             sentMessages.map((m, index)=>{
-                                                console.log(m);
                                                 return(
                                                     <li key={index}>
                                                         <p>{m.body}</p>
@@ -100,7 +101,7 @@ const Chat = () => {
             </Row>
         )
     }else{
-        return <Redirect to="/login"/>
+        return <Redirect to="/"/>
     }
 
 }

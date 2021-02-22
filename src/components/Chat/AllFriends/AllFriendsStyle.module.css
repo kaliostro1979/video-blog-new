@@ -1,3 +1,42 @@
 .AllFriendsMain ul{
     display: inline-block;
+    width: 100%;
+}
+
+.AllFriendsMain ul li{
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #bbbbbb;
+    background-color: #ededed;
+    margin-bottom: 5px;
+}
+
+.AllFriendsMain ul li:hover{
+    background-color: #bbbbbb;
+}
+
+.AllFriendsMain ul li p{
+    margin: 0;
+    line-height: 50px;
+}
+
+.UserImageContainer{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.UserImageContainer img{
+    width: 100%;
+}
+
+.RemoveFriend{
+    display: block;
+    position: absolute!important;
+    right: 22px!important;
+    top: 6px!important;
 }

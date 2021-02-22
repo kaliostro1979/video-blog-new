@@ -6,7 +6,6 @@ import uis from './UserInfoStyles.module.css'
 const UserInfo = () => {
     const {currentUser, avatarURL, currentUserName} = useContext(Context)
 
-
     if (currentUser) {
 
         return (

@@ -1,18 +1,57 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import af from "./AllFriendsStyle.module.css";
-import {Col} from "react-bootstrap";
+import {Button, Col, Row} from "react-bootstrap";
+import {Context} from "../../context/context";
+import firebase from "firebase";
 
-const AllFriends = ()=>{
-    return(
-        <Col lg={2}>
+const AllFriends = () => {
+
+    const {currentUser, status} = useContext(Context)
+
+    const [friends, setFriends] = useState([])
+
+    useEffect(async () => {
+
+        let isMounted = true;
+
+        await firebase.database().ref(`users/${currentUser.uid}/`).child('friends').on('value', (snapshot) => {
+            let fr = []
+            snapshot.forEach((friend) => {
+                fr = [friend.val(), ...fr]
+                setFriends(fr)
+            })
+        })
+
+        return () => {isMounted = false};
+    }, [])
+
+    return (
+        <Col lg={3}>
             <div className={af.AllFriendsMain}>
                 <h3>Friends</h3>
                 <ul>
-                    <li>Friend-1</li>
-                    <li>Friend-2</li>
-                    <li>Friend-3</li>
-                    <li>Friend-4</li>
-                    <li>Friend-5</li>
+                    {
+                        friends.map((f) => {
+                            return (
+                                <li key={f.id}>
+                                    <Row>
+                                        <Col lg={3}>
+                                            <div className={af.UserImageContainer}
+                                                 style={{backgroundImage: `url(${status ? f.imagePath : './avatar.png'})`}}>
+
+                                            </div>
+                                        </Col>
+                                        <Col lg={6}>
+                                            <p>{f.name}</p>
+                                        </Col>
+                                        <Col lg={3}>
+                                            <Button className={af.RemoveFriend} id={f.id} variant="danger">-</Button>
+                                        </Col>
+                                    </Row>
+                                </li>
+                            )
+                        })
+                    }
                 </ul>
             </div>
         </Col>
