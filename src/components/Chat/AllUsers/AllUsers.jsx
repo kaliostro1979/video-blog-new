@@ -10,6 +10,7 @@ const AllUsers = () => {
     const {status, allUsers, handleAddFriends, friends} = useContext(Context)
 
 
+
     return (
         <Col lg={3}>
             <div className={au.AllUsersMain}>

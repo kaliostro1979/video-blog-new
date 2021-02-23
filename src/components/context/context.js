@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react'
 import {auth} from "../../firebase";
-import firebase, {onLog} from "firebase";
+import firebase from "firebase";
 
 
 /*Current User*/
@@ -16,8 +16,13 @@ export const Provider = ({children}) => {
     const [status, setStatus] = useState(false)
     const [currentUserName, setCurrentUserName] = useState()
     const [allUsers, setAllUsers] = useState([])
+    const [friends, setFriends] = useState([])
 
-  /*====================================================================================================================*/
+    /*====================================================================================================================*/
+
+    /*---- Clear Local in End of Session ----*/
+
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then()
 
     /*--- User Status Handling ----*/
 
@@ -25,19 +30,28 @@ export const Provider = ({children}) => {
 
         let isMounted = true;
         await auth.onAuthStateChanged(user => {
-            setStatus(false)
-            if (user) {
+
+            if (user !== null) {
+                setStatus(true)
                 firebase.storage().ref(`users/${user.uid}/${user.uid}.jpg`).getDownloadURL()
                     .then((imgURL) => {
                         setAvatarURL(imgURL)
                     })
+                    .catch((err) => {
+
+                    })
+            }else{
+                setStatus(false)
             }
             setCurrentUser(user)
         });
+
         setLoading(false)
 
-        return () => {isMounted = false};
-    }, [currentUser])
+        return () => {
+            isMounted = false
+        };
+    }, [])
 
 
     /*--- End of User Status Handling ----*/
@@ -45,12 +59,13 @@ export const Provider = ({children}) => {
     /*==================================================================================================================*/
 
     useEffect(async () => {
+
         let isMounted = true;
 
         /*---- Get Current User Name ----*/
 
         if (currentUser) {
-            setStatus(true)
+
             await firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot) => {
                 let dataValue = snapshot.val()
                 const currentUserName = dataValue.name
@@ -60,7 +75,7 @@ export const Provider = ({children}) => {
                 }
             })
 
-    /*==================================================================================================================*/
+            /*==================================================================================================================*/
 
             /*--- Get User avatar URL ----*/
 
@@ -72,19 +87,20 @@ export const Provider = ({children}) => {
             } else {
                 await firebase.database().ref(`users/${currentUser.uid}`).update({
                     imagePath: './avatar.png',
+                    status: status
                 })
             }
 
             /*--- End of Get User avatar URL ----*/
 
-    /*==================================================================================================================*/
+            /*==================================================================================================================*/
 
             /*---- Get All Users ----*/
 
             await firebase.database().ref().child('users').on('value', (snapshot) => {
                 let userArray = []
                 snapshot.forEach((data) => {
-                    if (data.val().id !== currentUser.uid){
+                    if (data.val().id !== currentUser.uid) {
                         userArray = [data.val(), ...userArray]
                         setAllUsers(userArray)
                     }
@@ -93,14 +109,29 @@ export const Provider = ({children}) => {
 
             /*---- End of Get All Users ----*/
 
+            /*---- Get All Friends List ----*/
 
-    /*==================================================================================================================*/
+
+            await firebase.database().ref(`users/${currentUser.uid}/`).child('friends').on('value', (snapshot) => {
+                let fr = []
+                snapshot.forEach((friend) => {
+                    fr = [friend.val(), ...fr]
+                    setFriends(fr)
+                })
+            })
+
+
+            /*---- End of Get All Friends List ----*/
+
+
+            /*==================================================================================================================*/
 
         }
 
-        return () => {isMounted = false};
-
-    }, [avatarURL, status])
+        return () => {
+            isMounted = false
+        };
+    }, [currentUser, avatarURL, status])
 
 
     /*---- Handle Friends Adding ----*/
@@ -112,6 +143,7 @@ export const Provider = ({children}) => {
             if (addFriendBtnId === fr.id && addFriendBtnId !== currentUser.uid) {
                 const selectedFriends = firebase.database().ref(`users/${currentUser.uid}/friends`)
                 selectedFriends.push(fr)
+                addFriendBtn.setAttribute('disabled', true)
             }
         })
     }
@@ -140,6 +172,8 @@ export const Provider = ({children}) => {
     }
 
     useEffect(async () => {
+
+
         let isMounted = true;
 
         setLoading(true)
@@ -148,7 +182,9 @@ export const Provider = ({children}) => {
 
         setLoading(false)
 
-        return () => {isMounted = false};
+        return () => {
+            isMounted = false
+        };
     }, [])
 
     /*----- End of Youtube API -----*/
@@ -165,7 +201,8 @@ export const Provider = ({children}) => {
                 imagePath,
                 status,
                 allUsers,
-                handleAddFriends
+                handleAddFriends,
+                friends
             }}>
             {!loading && children}
         </Context.Provider>

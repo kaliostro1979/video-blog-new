@@ -6,24 +6,41 @@ import firebase from "firebase";
 
 const AllFriends = () => {
 
-    const {currentUser, status} = useContext(Context)
+    const {friends, currentUser, allUsers} = useContext(Context)
 
-    const [friends, setFriends] = useState([])
+    const [friendStatus, setFriendStatus] = useState(false)
+    const [friendId, setFriendId] = useState('')
+    const [usersId, setUsersId] = useState('')
+    const [usersStatus, setUsersStatus] = useState(false)
 
-    useEffect(async () => {
 
-        let isMounted = true;
-
-        await firebase.database().ref(`users/${currentUser.uid}/`).child('friends').on('value', (snapshot) => {
-            let fr = []
-            snapshot.forEach((friend) => {
-                fr = [friend.val(), ...fr]
-                setFriends(fr)
-            })
+    function getFriendsInfo (){
+        friends.forEach((e)=>{
+            setFriendId(e.id)
         })
+    }
 
-        return () => {isMounted = false};
-    }, [])
+    function getUsersStatus (){
+        allUsers.forEach((e)=>{
+            setUsersStatus(e.status)
+            setUsersId(e.id)
+        })
+    }
+
+    useEffect(async ()=>{
+        getFriendsInfo ()
+        getUsersStatus ()
+        if(friendId === usersId){
+            await firebase.database().ref(`users/${currentUser.uid}`).child('friends').on('value', (snapshot)=>{
+                snapshot.forEach((item)=>{
+                    setFriendStatus(item.val().status)
+                })
+            })
+        }
+
+    },[friendStatus])
+
+    console.log(friendStatus, usersStatus);
 
     return (
         <Col lg={3}>
@@ -37,7 +54,7 @@ const AllFriends = () => {
                                     <Row>
                                         <Col lg={3}>
                                             <div className={af.UserImageContainer}
-                                                 style={{backgroundImage: `url(${status ? f.imagePath : './avatar.png'})`}}>
+                                                 style={{backgroundImage: `url(${friendStatus ? f.imagePath : './avatar.png'})`}}>
 
                                             </div>
                                         </Col>

@@ -9,6 +9,8 @@ import {Context} from "../context/context";
 
 const SignUp = ({history}) => {
 
+    const {status} = useContext(Context)
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
