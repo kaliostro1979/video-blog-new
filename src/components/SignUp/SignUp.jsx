@@ -9,7 +9,7 @@ import {Context} from "../context/context";
 
 const SignUp = ({history}) => {
 
-    const {status} = useContext(Context)
+    const {avatarURL} = useContext(Context)
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -25,7 +25,7 @@ const SignUp = ({history}) => {
             let videos = []
             let friends = []
             event.preventDefault()
-           await auth.createUserWithEmailAndPassword(email, password)
+            await auth.createUserWithEmailAndPassword(email, password)
                 .then((data) => {
                     setEmail('')
                     setPassword('')

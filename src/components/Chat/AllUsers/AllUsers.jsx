@@ -7,7 +7,7 @@ import {Context} from "../../context/context";
 
 const AllUsers = () => {
 
-    const {status, allUsers, handleAddFriends, friends} = useContext(Context)
+    const {status, allUsers, handleAddFriends} = useContext(Context)
 
 
 

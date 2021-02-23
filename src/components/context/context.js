@@ -24,6 +24,7 @@ export const Provider = ({children}) => {
 
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then()
 
+
     /*--- User Status Handling ----*/
 
     useEffect(async () => {
@@ -32,11 +33,10 @@ export const Provider = ({children}) => {
         await auth.onAuthStateChanged(user => {
             if (user !== null) {
                 setCurrentUser(user)
-                setStatus(true)
             }
             if (user === null) {
-                setCurrentUser(null)
                 setStatus(false)
+                setCurrentUser(null)
             }
         });
 
@@ -58,6 +58,7 @@ export const Provider = ({children}) => {
             await firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot) => {
                 let dataValue = snapshot.val()
                 if (dataValue !== null) {
+                    setStatus(true)
                     var currentUserName = dataValue.name
                     var currentUserId = dataValue.id
                     if (currentUserId === currentUser.uid) {
@@ -65,7 +66,7 @@ export const Provider = ({children}) => {
                     }
                     firebase.storage().ref(`users/${currentUser.uid}/${currentUser.uid}.jpg`).getDownloadURL()
                         .then((imgURL) => {
-                            //console.log(imgURL);
+                            /*console.log(imgURL);*/
                             setAvatarURL(imgURL)
                         })
                         .catch((err) => {
@@ -76,22 +77,21 @@ export const Provider = ({children}) => {
 
             /*==================================================================================================================*/
 
-            /*--- Get User avatar URL ----*/
+            /*--- Update User avatar URL and Status ----*/
             console.log(status);
             if (status){
-                await firebase.database().ref(`users/${currentUser.uid}`).update({
+                await firebase.database().ref(`users/`).child(`${currentUser.uid}`).update({
                     imagePath: avatarURL,
                     status: status
                 })
             }else{
-                await firebase.database().ref(`users/${currentUser.uid}`).update({
+                await firebase.database().ref(`users/`).child(`${currentUser.uid}`).update({
                     imagePath: './avatar.png',
                     status: status
                 })
             }
 
-
-            /*--- End of Get User avatar URL ----*/
+            /*--- End of Update User avatar URL and Status ----*/
 
             /*==================================================================================================================*/
 
@@ -133,6 +133,9 @@ export const Provider = ({children}) => {
     }, [currentUser, avatarURL, status])
 
 
+
+
+
     /*---- Handle Friends Adding ----*/
 
     function handleAddFriends(event) {
@@ -170,7 +173,7 @@ export const Provider = ({children}) => {
             });
     }
 
-    useEffect(async () => {
+    useMemo(async () => {
 
 
         let isMounted = true;
@@ -184,7 +187,7 @@ export const Provider = ({children}) => {
         return () => {
             isMounted = false
         };
-    }, [])
+    }, []).then()
 
     /*----- End of Youtube API -----*/
 
