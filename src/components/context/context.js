@@ -30,27 +30,17 @@ export const Provider = ({children}) => {
 
         let isMounted = true;
         await auth.onAuthStateChanged(user => {
-
             if (user !== null) {
+                setCurrentUser(user)
                 setStatus(true)
-                firebase.storage().ref(`users/${user.uid}/${user.uid}.jpg`).getDownloadURL()
-                    .then((imgURL) => {
-                        setAvatarURL(imgURL)
-                    })
-                    .catch((err) => {
-
-                    })
-            }else{
+            }
+            if (user === null) {
+                setCurrentUser(null)
                 setStatus(false)
             }
-            setCurrentUser(user)
         });
 
-        setLoading(false)
-
-        return () => {
-            isMounted = false
-        };
+        return () => isMounted = false
     }, [])
 
 
@@ -63,33 +53,43 @@ export const Provider = ({children}) => {
         let isMounted = true;
 
         /*---- Get Current User Name ----*/
-
         if (currentUser) {
 
             await firebase.database().ref(`users/${currentUser.uid}`).on('value', (snapshot) => {
                 let dataValue = snapshot.val()
-                const currentUserName = dataValue.name
-                const currentUserId = dataValue.id
-                if (currentUserId === currentUser.uid) {
-                    setCurrentUserName(currentUserName)
+                if (dataValue !== null) {
+                    var currentUserName = dataValue.name
+                    var currentUserId = dataValue.id
+                    if (currentUserId === currentUser.uid) {
+                        setCurrentUserName(currentUserName)
+                    }
+                    firebase.storage().ref(`users/${currentUser.uid}/${currentUser.uid}.jpg`).getDownloadURL()
+                        .then((imgURL) => {
+                            //console.log(imgURL);
+                            setAvatarURL(imgURL)
+                        })
+                        .catch((err) => {
+
+                        })
                 }
             })
 
             /*==================================================================================================================*/
 
             /*--- Get User avatar URL ----*/
-
-            if (status) {
+            console.log(status);
+            if (status){
                 await firebase.database().ref(`users/${currentUser.uid}`).update({
                     imagePath: avatarURL,
                     status: status
                 })
-            } else {
+            }else{
                 await firebase.database().ref(`users/${currentUser.uid}`).update({
                     imagePath: './avatar.png',
                     status: status
                 })
             }
+
 
             /*--- End of Get User avatar URL ----*/
 
@@ -128,9 +128,8 @@ export const Provider = ({children}) => {
 
         }
 
-        return () => {
-            isMounted = false
-        };
+        return () => isMounted = false
+
     }, [currentUser, avatarURL, status])
 
 
